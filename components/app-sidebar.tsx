@@ -8,7 +8,6 @@ import {
   SidebarMenuItem,
  
 } from "@/components/ui/sidebar";
-import { ModeToggle } from "./mode-toggle";
 import { Progress } from "@/components/ui/progress";
 
 // import icons
@@ -61,10 +60,7 @@ export function AppSidebar() {
     <Sidebar className="flex flex-col justify-center items-center">
       {/* sidebar Header */}
       <SidebarHeader className="w-full h-[80px] flex flex-row justify-center items-center px-[20px] border-b">
-        <div className="flex-1">Logo</div>
-        <div>
-          <ModeToggle />
-        </div>
+        <div className="">Logo</div>
       </SidebarHeader>
 
       <SidebarContent className="">

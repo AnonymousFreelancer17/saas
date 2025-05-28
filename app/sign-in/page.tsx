@@ -1,5 +1,7 @@
 "use client";
 
+import { useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,38 +22,78 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { FaGoogle } from "react-icons/fa6";
 import { z } from "zod";
+import { FaGoogle } from "react-icons/fa6";
+import Link from "next/link";
 
-// Zod Schema
 const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  userEmail: z.string().email({ message: "Enter a valid email." }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
 });
 
-function InputForm() {
+function Page() {
+  const { isLoaded, signIn, setActive } = useSignIn();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      userEmail: "",
       password: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("Form submitted:", data);
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (!isLoaded) return;
+
+    try {
+      const result = await signIn.create({
+        identifier: data.userEmail,
+        password: data.password,
+      });
+
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        router.push("/dashboard"); // Redirect after login
+      } else {
+        console.log("Additional steps required", result);
+      }
+    } catch (err: unknown) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "errors" in err &&
+        Array.isArray((err as any).errors)
+      ) {
+        console.error("Sign-in error:", (err as any).errors);
+        form.setError("userEmail", {
+          message: (err as any).errors?.[0]?.message || "Failed to sign in.",
+        });
+      } else {
+        console.error("Sign-in error:", err);
+        form.setError("userEmail", {
+          message: "Failed to sign in.",
+        });
+      }
+    }
+  }
+
+  async function signInWithGoogle() {
+    if (!isLoaded) return;
+    await signIn.authenticateWithRedirect({
+      strategy: "oauth_google",
+      redirectUrl: "/dashboard",
+      redirectUrlComplete: "/dashboard",
+    });
   }
 
   return (
     <div className="flex-1 w-full flex justify-center items-center">
       <Card className="lg:w-[30vw] md:w-[50vw] w-[80vw] flex flex-col justify-start items-center px-4 py-[40px]">
-        <CardHeader className="w-full h-[80px]  flex flex-col justify-center items-center">
+        <CardHeader className="w-full flex flex-col justify-center items-center">
           <div className="h-[30px] flex justify-center items-center">LOGO</div>
           <CardTitle className="text-2xl">Sign In to Gitti</CardTitle>
           <CardDescription className="font-light text-md">
@@ -60,12 +102,13 @@ function InputForm() {
         </CardHeader>
         <CardContent className="flex-1 w-full flex flex-col justify-center items-center">
           <div className="w-full flex flex-col justify-center">
-            <Button className="w-full rounded-[5px] h-[40px] cursor-pointer">
+            <Button
+              className="w-full rounded-[5px] h-[40px] cursor-pointer flex gap-2"
+              onClick={signInWithGoogle}
+            >
               <FaGoogle />
-              Google
+              Sign in with Google
             </Button>
-
-            {/*  add more options in the future if required */}
           </div>
 
           <div className="my-4">Or</div>
@@ -76,19 +119,19 @@ function InputForm() {
             >
               <FormField
                 control={form.control}
-                name="username"
+                name="userEmail"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         className="rounded-[0px] h-[40px] outline-0"
-                        placeholder="Username"
+                        placeholder="you@example.com"
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      This is your public display name.
+                      This is your sign-in email.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -104,8 +147,7 @@ function InputForm() {
                       <Input
                         type="password"
                         className="rounded-[0px] h-[40px] outline-0"
-                        placeholder="*****"
-                        {...field}
+                        placeholder="••••••"
                         {...field}
                       />
                     </FormControl>
@@ -124,32 +166,28 @@ function InputForm() {
               </Button>
             </form>
           </Form>
-          <div
-            className="w-full flex justify-center items-center my-2
-          "
-          >
-            <p> Don`t have an account?</p>
+          <div className="w-full flex justify-center items-center my-2">
+            <p>Don’t have an account?</p>
             <Link href={"/sign-up"} className="ms-2 text-blue-500">
               Create an account
             </Link>
           </div>
         </CardContent>
-        <CardFooter className="w-full h-[60px] flex flex-col justify-center items-center border-t">
+        <CardFooter className="w-full flex flex-col justify-center items-center border-t">
           <div>Logo</div>
           <div className="font-light text-xs">
-            One Account for Gitti,Loha,Tina and
+            One Account for Gitti, Loha, Tina and
             <Link href={"/"} className="text-blue-500 ms-2">
               more
             </Link>
           </div>
-
           <div className="font-light text-xs text-center">
             This site is protected by reCAPTCHA and the Google
-            <Link href={""} className="text-blue-500 ms-1">
+            <Link href="#" className="text-blue-500 ms-1">
               Privacy Policy
             </Link>{" "}
             and
-            <Link href={""} className="text-blue-500 ms-1">
+            <Link href="#" className="text-blue-500 ms-1">
               Terms of Service
             </Link>{" "}
             apply.
@@ -160,4 +198,4 @@ function InputForm() {
   );
 }
 
-export default InputForm;
+export default Page;
