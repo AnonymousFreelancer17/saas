@@ -1,6 +1,10 @@
-import { Button } from "@/components/ui/button";
+"use client"
 
+import { Button } from "@/components/ui/button";
+ 
 const Page = () => {
+
+
   return (
     <>
       <section className="w-screen h-screen flex justify-center items-center">
