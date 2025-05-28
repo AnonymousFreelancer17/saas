@@ -75,10 +75,15 @@ export function AppSidebar() {
               key={item.title}
               className="w-10/12 h-[60px] flex justify-center items-center"
             >
-              <SidebarMenuButton className=" h-full" asChild>
-                <a href={item.url}>
-                  <item.icon />
-                  <p className="flex-1">{item.title}</p>
+              <SidebarMenuButton className="h-full" asChild>
+                <a
+                 href={item.url}
+                 className=""
+                >
+                  <div className="w-1/3 flex justify-end items-center">
+                      <item.icon />
+                  </div>
+                  <p className="">{item.title}</p>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>

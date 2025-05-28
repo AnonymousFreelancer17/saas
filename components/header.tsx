@@ -23,7 +23,7 @@ const Header = () => {
         </div>
       </SignedOut>
       <SignedIn>
-        <div className="w-[100px] h-full flex justify-evenly items-center">
+        <div className="w-[60px] flex justify-evenly items-center">
           <UserButton />
         </div>
       </SignedIn>
