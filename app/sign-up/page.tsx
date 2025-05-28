@@ -25,7 +25,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FaGoogle } from "react-icons/fa6";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Switch } from "@/components/ui/switch";
 
 // Sign up form schema
 const FormSchema = z.object({
@@ -46,6 +47,8 @@ function Page() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [verifying, setVerifying] = useState(false);
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const passwordInput = useRef<HTMLInputElement>(null);
 
   const signUpForm = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -128,11 +131,16 @@ function Page() {
         <Card className="lg:w-[30vw] md:w-[50vw] w-[80vw] px-4 py-[40px]">
           <CardHeader>
             <CardTitle className="text-2xl">Verify your email</CardTitle>
-            <CardDescription>Enter the 6-digit code sent to your email.</CardDescription>
+            <CardDescription>
+              Enter the 6-digit code sent to your email.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...verifyForm}>
-              <form onSubmit={verifyForm.handleSubmit(handleVerify)} className="w-full space-y-4">
+              <form
+                onSubmit={verifyForm.handleSubmit(handleVerify)}
+                className="w-full space-y-4"
+              >
                 <FormField
                   control={verifyForm.control}
                   name="code"
@@ -150,7 +158,9 @@ function Page() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">Verify</Button>
+                <Button type="submit" className="w-full cursor-pointer">
+                  Verify
+                </Button>
               </form>
             </Form>
           </CardContent>
@@ -173,7 +183,7 @@ function Page() {
           <div className="w-full mb-4">
             <Button
               type="button"
-              className="w-full rounded-[5px] h-[40px] flex gap-2"
+              className="w-full rounded-[5px] h-[40px] flex gap-2 cursor-pointer"
               onClick={signUpWithGoogle}
             >
               <FaGoogle />
@@ -181,10 +191,13 @@ function Page() {
             </Button>
           </div>
 
-          <div className="text-sm text-center mb-4">Or sign up with email</div>
+          <div className="text-sm text-center mb-4 font-bold">Or</div>
 
           <Form {...signUpForm}>
-            <form onSubmit={signUpForm.handleSubmit(onSubmit)} className="space-y-6">
+            <form
+              onSubmit={signUpForm.handleSubmit(onSubmit)}
+              className="space-y-6"
+            >
               <FormField
                 control={signUpForm.control}
                 name="email"
@@ -211,9 +224,13 @@ function Page() {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         className="rounded-[0px] h-[40px]"
                         placeholder="••••••"
+                        ref={(el) => {
+                          field.ref(el);
+                          passwordInput.current = el;
+                        }}
                         {...field}
                       />
                     </FormControl>
@@ -222,13 +239,33 @@ function Page() {
                 )}
               />
 
-              <div className="text-xs text-muted-foreground">
-                By signing up, you agree to our{" "}
-                <Link href="#" className="text-blue-500 underline">Terms of Service</Link> and{" "}
-                <Link href="#" className="text-blue-500 underline">Privacy Policy</Link>.
+              <div className="w-full flex justify-end items-center">
+                View Password
+                <Switch
+                  checked={showPassword}
+                  onCheckedChange={setShowPassword}
+                  className="ms-2"
+                />
               </div>
 
-              <Button type="submit" className="w-full rounded-[5px] h-[40px]">
+              <div className="text-xs text-muted-foreground">
+                By signing up, you agree to our{" "}
+                <Link href="#" className="text-blue-500 underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="#" className="text-blue-500 underline">
+                  Privacy Policy
+                </Link>
+                .
+              </div>
+
+              <div id="clerk-captcha" />
+
+              <Button
+                type="submit"
+                className="w-full rounded-[5px] h-[40px] cursor-pointer"
+              >
                 Sign Up
               </Button>
             </form>
@@ -236,7 +273,10 @@ function Page() {
 
           <div className="text-sm text-center mt-4">
             Already have an account?{" "}
-            <Link href="/sign-in" className="text-blue-500 underline">
+            <Link
+              href="/sign-in"
+              className="text-blue-500 underline cursor-pointer"
+            >
               Sign In
             </Link>
           </div>
@@ -244,11 +284,22 @@ function Page() {
 
         <CardFooter className="flex flex-col items-center border-t pt-4 text-xs">
           <div>LOGO</div>
-          <p>One account for Gitti, Loha, Tina, and <Link href="/" className="text-blue-500">more</Link></p>
+          <p>
+            One account for Gitti, Loha, Tina, and{" "}
+            <Link href="/" className="text-blue-500">
+              more
+            </Link>
+          </p>
           <p className="text-center">
             This site is protected by reCAPTCHA and the Google{" "}
-            <Link href="#" className="text-blue-500">Privacy Policy</Link> and{" "}
-            <Link href="#" className="text-blue-500">Terms of Service</Link> apply.
+            <Link href="#" className="text-blue-500 cursor-pointer">
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link href="#" className="text-blue-500 cursor-pointer">
+              Terms of Service
+            </Link>{" "}
+            apply.
           </p>
         </CardFooter>
       </Card>

@@ -26,6 +26,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FaGoogle } from "react-icons/fa6";
 import Link from "next/link";
+import { Switch } from "@/components/ui/switch";
+import { useRef, useState } from "react";
 
 const FormSchema = z.object({
   userEmail: z.string().email({ message: "Enter a valid email." }),
@@ -37,6 +39,8 @@ const FormSchema = z.object({
 function Page() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const passwordInput = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -111,7 +115,7 @@ function Page() {
             </Button>
           </div>
 
-          <div className="my-4">Or</div>
+          <div className="my-4 font-bold text-sm">Or</div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -145,9 +149,13 @@ function Page() {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         className="rounded-[0px] h-[40px] outline-0"
                         placeholder="••••••"
+                        ref={(el) => {
+                          field.ref(el);
+                          passwordInput.current = el;
+                        }}
                         {...field}
                       />
                     </FormControl>
@@ -158,6 +166,16 @@ function Page() {
                   </FormItem>
                 )}
               />
+
+              <div className="w-full flex justify-end items-center">
+                View Password
+                <Switch
+                  checked={showPassword}
+                  onCheckedChange={setShowPassword}
+                  className="ms-2"
+                />
+              </div>
+
               <Button
                 type="submit"
                 className="w-full cursor-pointer rounded-[5px] h-[40px]"
@@ -177,17 +195,17 @@ function Page() {
           <div>Logo</div>
           <div className="font-light text-xs">
             One Account for Gitti, Loha, Tina and
-            <Link href={"/"} className="text-blue-500 ms-2">
+            <Link href={"/"} className="text-blue-500 ms-2 cursor-pointer">
               more
             </Link>
           </div>
           <div className="font-light text-xs text-center">
             This site is protected by reCAPTCHA and the Google
-            <Link href="#" className="text-blue-500 ms-1">
+            <Link href="#" className="text-blue-500 ms-1 cursor-pointer">
               Privacy Policy
             </Link>{" "}
             and
-            <Link href="#" className="text-blue-500 ms-1">
+            <Link href="#" className="text-blue-500 ms-1 cursor-pointer">
               Terms of Service
             </Link>{" "}
             apply.
