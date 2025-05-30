@@ -64,6 +64,7 @@ function Page() {
         router.push("/dashboard"); // Redirect after login
       } else {
         console.log("Additional steps required", result);
+        
       }
     } catch (err: unknown) {
       if (

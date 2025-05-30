@@ -9,7 +9,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
-const Header = () => {
+const HeaderAuthButtonGroup = () => {
   return (
     <header className="w-auto h-[80px] flex justify-end items-center">
       <SignedOut>
@@ -31,4 +31,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderAuthButtonGroup;

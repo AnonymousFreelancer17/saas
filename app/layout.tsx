@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import AppLayout from "./app_layout";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/Theme/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from '@clerk/themes';
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -21,7 +22,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+     appearance={{ baseTheme: dark }}
+    >
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${bricolage.variable} antialiased w-screen hscreen flex justify-center items-center overflow-hidden`}

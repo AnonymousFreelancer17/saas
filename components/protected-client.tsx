@@ -11,9 +11,9 @@ const ProtectedClient = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (isLoaded && !user) {
-      router.push("/sign-in");
+      router.push("/");
     }
-  }, [isLoaded, user]);
+  }, [isLoaded, user, router]);
 
   if (!isLoaded) return <div>Loading...</div>;
 
