@@ -3,6 +3,7 @@
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { prisma } from "@/lib/prisma";
 import {
   Card,
   CardContent,
@@ -96,7 +97,7 @@ function Page() {
   }
 
   return (
-    <div className="flex-1 w-full flex justify-center items-center">
+    <div className="min-h-screen w-full flex justify-center items-center mt-[40px]">
       <Card className="lg:w-[30vw] md:w-[50vw] w-[80vw] flex flex-col justify-start items-center px-4 py-[40px]">
         <CardHeader className="w-full flex flex-col justify-center items-center">
           <div className="h-[30px] flex justify-center items-center">LOGO</div>

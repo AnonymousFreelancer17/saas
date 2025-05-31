@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import React from "react";
+import { FaSpinner } from "react-icons/fa6";
 
 const ProtectedClient = ({ children }: { children: React.ReactNode }) => {
   const { isLoaded, user } = useUser();
@@ -15,7 +16,12 @@ const ProtectedClient = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isLoaded, user, router]);
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return <div className="min-h-screen w-full flex flex-col justify-center items-center relative">
+    <FaSpinner className="animate-spin mb-4" />
+    <p className="text-2xl">
+      Loading...
+    </p>
+  </div>;
 
   return <>{children}</>;
 };

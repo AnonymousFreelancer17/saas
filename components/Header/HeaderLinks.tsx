@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 import {
@@ -11,11 +11,10 @@ import {
   // navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
+import type { UserResource } from "@clerk/types";
 
-const HeaderLinks = () => {
-
-
-   const components: { title: string; href: string; description: string }[] = [
+const HeaderLinks = ({ user }: { user: UserResource | null | undefined }) => {
+  const components: { title: string; href: string; description: string }[] = [
     {
       title: "Alert Dialog",
       href: "/docs/primitives/alert-dialog",
@@ -54,65 +53,96 @@ const HeaderLinks = () => {
   ];
 
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-          <NavigationMenuContent>
-        
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/"
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                  >
-                    {/* <Icons.logo className="h-6 w-6" /> */}
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      shadcn/ui
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components that you can copy and
-                      paste into your apps. Accessible. Customizable. Open
-                      Source.
-                    </p>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <Link href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
-              </Link>
-              <Link href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
-              </Link>
-              <Link href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
-              </Link>
-            </ul>
-            
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {components.map((component) => (
-                <Link
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
+    <NavigationMenu className="h-full flex-1 flex justify-center items-center">
+      {!user && (
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                <li className="row-span-3">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href="/"
+                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                    >
+                      {/* <Icons.logo className="h-6 w-6" /> */}
+                      <div className="mb-2 mt-4 text-lg font-medium">
+                        shadcn/ui
+                      </div>
+                      <p className="text-sm leading-tight text-muted-foreground">
+                        Beautifully designed components that you can copy and
+                        paste into your apps. Accessible. Customizable. Open
+                        Source.
+                      </p>
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
+                <Link href="/docs" title="Introduction">
+                  Re-usable components built using Radix UI and Tailwind CSS.
                 </Link>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+                <Link href="/docs/installation" title="Installation">
+                  How to install dependencies and structure your app.
+                </Link>
+                <Link href="/docs/primitives/typography" title="Typography">
+                  Styles for headings, paragraphs, lists...etc
+                </Link>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                {components.map((component) => (
+                  <Link
+                    key={component.title}
+                    title={component.title}
+                    href={component.href}
+                  >
+                    {component.description}
+                  </Link>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                {components.map((component) => (
+                  <Link
+                    key={component.title}
+                    title={component.title}
+                    href={component.href}
+                  >
+                    {component.description}
+                  </Link>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
-      </NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                {components.map((component) => (
+                  <Link
+                    key={component.title}
+                    title={component.title}
+                    href={component.href}
+                  >
+                    {component.description}
+                  </Link>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>    
+        </NavigationMenuList>
+      )}
     </NavigationMenu>
   );
 };

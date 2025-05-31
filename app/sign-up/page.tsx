@@ -127,7 +127,7 @@ function Page() {
   // Verification UI
   if (verifying) {
     return (
-      <div className="flex-1 w-full flex justify-center items-center">
+      <div className="min-h-screen w-full flex justify-center items-center mt-[100px]">
         <Card className="lg:w-[30vw] md:w-[50vw] w-[80vw] px-4 py-[40px]">
           <CardHeader>
             <CardTitle className="text-2xl">Verify your email</CardTitle>
@@ -171,7 +171,7 @@ function Page() {
 
   // Sign-up UI
   return (
-    <div className="flex-1 w-full flex justify-center items-center">
+    <div className="min-h-screen w-full flex justify-center items-center mt-[40px]">
       <Card className="lg:w-[30vw] md:w-[50vw] w-[80vw] px-4 py-[40px]">
         <CardHeader className="text-center">
           <div className="h-[30px]">LOGO</div>

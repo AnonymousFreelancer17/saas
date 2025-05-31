@@ -7,6 +7,9 @@ import HeaderLinks from "./HeaderLinks";
 import { ModeToggle } from "../Theme/mode-toggle";
 import HeaderAuthButtonGroup from "./headerAuthButtonGroup";
 import type { UserResource } from "@clerk/types";
+import { Button } from "../ui/button";
+import { FaBell, FaMagnifyingGlass } from "react-icons/fa6";
+import Link from "next/link";
 
 type HeaderProps = {
   setIsCollapsed: (value: boolean) => void;
@@ -20,36 +23,44 @@ const Header: React.FC<HeaderProps> = ({
   user,
 }) => {
   return (
-    <div className="w-full flex justify-center items-center border-b">
-      {(isCollapsed || !user) && (
-        <div className="h-full w-[255px] flex justify-center items-center">
+    <div className="w-full h-[80px] flex justify-center items-center border-b top-0 left-0 fixed z-50">
+      {(!isCollapsed || !user) && (
+        <Link href={"/"} className="h-full w-[255px] flex justify-center items-center">
           Logo
-        </div>
+        </Link>
       )}
-      <div className="flex-1 h-full  flex justify-between items-center">
-        <div className="h-full flex flex-1 justify-start items-center">
-          {user && (
-            <SidebarTrigger
-              className="w-[36px] h-[36px] border rounded-md flex justify-center items-center ms-2"
-              onClick={() => setIsCollapsed(!isCollapsed)}
-            />
-          )}
-          <div className="flex-1 h-full flex justify-between items-center px-2 mx-2 ">
-            <div className="w-1/2 h-[40px] rounded-md flex justify-start items-center ">
-              {/* // <FaMagnifyingGlass />
-                // <Input 
-                //   value={""}
-                //   onChange={() => {}}
-                //   className="flex-1 border-0 outline-0 focus:outline-none focus:ring-0 focus:ring-transparent focus-visible:ring-0 shadow-none"
-                //   placeholder="Search your projects here"
-                // /> */}
-            </div>
-            {/*  header links */}
-            <HeaderLinks />
-          </div>
-        </div>
+      <div
+        className={`flex-1 h-full flex ${
+          user ? "justify-between" : "justify-end"
+        } items-center mx-2`}
+      >
+        {user && (
+          <SidebarTrigger
+            className="w-[36px] h-[36px] border rounded-md flex justify-center items-center ms-2"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          />
+        )}
 
-        <ModeToggle />
+        <HeaderLinks user={user} />
+
+        <div className="flex justify-center items-center">
+          {user && (
+            <Button className="mx-2 w-[36px] h-[36px] relative cursor-pointer" variant={"outline"}>
+              <div className="w-[12px] h-[12px] text-white bg-red-500 rounded-full absolute z-10 right-[8px] top-[5px] animate-pulse">
+              </div>
+              <div className="w-[10px] h-[10px] text-white bg-red-500 rounded-full absolute z-20 right-[8px] top-[5px]">
+                {/* <p className="text-xs">4</p> */}
+              </div>
+              <FaBell />
+            </Button>
+          )}
+
+          <ModeToggle />
+
+          <Button variant={"outline"} className="ms-2 me-8 w-[36px] h-[36px] cursor-pointer">
+            <FaMagnifyingGlass size={8} />
+          </Button>
+        </div>
       </div>
       <HeaderAuthButtonGroup />
     </div>

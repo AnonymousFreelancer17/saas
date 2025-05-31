@@ -27,7 +27,7 @@ export default function RootLayout({
     >
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${bricolage.variable} antialiased w-screen hscreen flex justify-center items-center overflow-hidden`}
+          className={`${bricolage.variable} antialiased w-screen h-auto flex justify-center items-center overflow-y-scroll overflow-x-hidden`}
         >
           <ThemeProvider
             attribute="class"

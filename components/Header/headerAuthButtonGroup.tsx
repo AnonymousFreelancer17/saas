@@ -11,23 +11,22 @@ import {
 
 const HeaderAuthButtonGroup = () => {
   return (
-    <header className="w-auto h-[80px] flex justify-end items-center">
+    <div className="w-auto h-full flex justify-end items-center border-l">
       <SignedOut>
         <div className="w-[200px] flex justify-evenly items-center">
-          <div className="cursor-pointer">
+         
             <SignInButton />
-          </div>
-          <div className="cursor-pointer">
+          
             <SignUpButton />
-          </div>
+          
         </div>
       </SignedOut>
       <SignedIn>
-        <div className="w-[60px] flex justify-evenly items-center">
+        <div className="w-[80px] flex justify-center items-center">
           <UserButton />
         </div>
       </SignedIn>
-    </header>
+    </div>
   );
 };
 

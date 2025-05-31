@@ -18,7 +18,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       onOpenChange={() => {
         setIsCollapsed(!isCollapsed);
       }}
-      className="w-screen h-screen flex justify-center items-center"
+      className="w-screen h-auto flex justify-start items-start"
       style={
         {
           "--sidebarWidth": isCollapsed ? "0px" : "250px",
@@ -30,13 +30,14 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Main Content */}
       <div
-        className="h-screen flex flex-col justify-center items-center transition-all duration-300"
+        className="flex flex-col justify-end items-end transition-all duration-300"
         style={{
-          width: user ? "calc(100% - var(--sidebarWidth))" : "100%",
+          width: user ? "calc(100% - var(--sidebarWidth))" : "100%"
         }}
       >
         {/* Header */}
         <Header isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} user={user}  />
+
         <ProtectedClient>{children}</ProtectedClient>
       </div>
     </SidebarProvider>
